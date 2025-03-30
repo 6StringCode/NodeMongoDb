@@ -1,0 +1,18 @@
+{
+  "name": "udemy-grider-mongonode-muber",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test nodemon --exec 'mocha --recursive -R min'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^4.21.2",
+    "mocha": "^11.1.0",
+    "mongoose": "^8.13.1",
+    "supertest": "^7.1.0"
+  }
+}
