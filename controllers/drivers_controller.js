@@ -5,6 +5,27 @@ module.exports = {
     res.send({ hi: 'there' })
   },
 
+  index(req, res, next) {
+    const { lng, lat } = req.query
+
+    if (!lng || !lat) {
+      return res.status(422).send({ error: 'You must provide lng and lat query parameters' });
+    }
+
+    Driver.aggregate([
+      {
+        $geoNear: {
+          near: { type: 'Point', coordinates: [parseFloat(lng), parseFloat(lat)] }, //must coerce to int because query will be string
+          distanceField: 'dist.calculated',
+          spherical: true,
+          maxDistance: 200000,
+        }
+      }
+    ])
+      .then(drivers => res.send(drivers))
+      .catch(next)
+  },
+
   create(req, res, next) {
     // console.log(req.body)
     const driverProps = req.body
@@ -27,7 +48,7 @@ module.exports = {
     const driverId = req.params.id;
 
     Driver.findByIdAndDelete(driverId)
-      .then(driver => res.status(204).send(driver, `driver with id ${driverId} deleted`))
+      .then(driver => res.status(204).send({ message: `driver with id ${driverId} deleted` }))
       .catch(next);
   }
 }
